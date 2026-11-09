@@ -1,0 +1,32 @@
+{
+  "result": "PASS",
+  "spec": "chara_card_v3",
+  "spec_version": "3.0",
+  "book_entries": 79,
+  "timeline_enabled": [
+    "时间线｜第1卷｜屏幕里的米塔与初次相遇"
+  ],
+  "story_intro_date": "2026年08月06日",
+  "alternate_greetings": 2,
+  "roleplay_guardrails": "no MVU, no scripts, no retroactive player 37-day phone phase",
+  "byte_characters": 194647,
+  "data_fields": [
+    "name",
+    "description",
+    "personality",
+    "scenario",
+    "first_mes",
+    "mes_example",
+    "creator_notes",
+    "system_prompt",
+    "post_history_instructions",
+    "alternate_greetings",
+    "tags",
+    "creator",
+    "character_version",
+    "extensions",
+    "character_book"
+  ],
+  "png_attached": "PENDING (cover original available locally but GitHub repo has no cover yet)",
+  "device_qa": "NOT STARTED"
+}
