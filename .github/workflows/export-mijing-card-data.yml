@@ -1,0 +1,33 @@
+name: Export final card data for PNG assembly
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/export-mijing-card-data.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate final card and worldbook
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          card=json.loads(Path('assembly/card/dist/米鲸_MiSide_AI娘_最终角色卡_v1.0.0.json').read_text(encoding='utf-8'))
+          book=json.loads(Path('assembly/worldbook/dist/米鲸_character_book.json').read_text(encoding='utf-8'))
+          assert card['spec']=='chara_card_v3'
+          assert card['data']['character_book']==book
+          assert len(book['entries'])==79
+          print('Export validation PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mijing-final-card-data
+          path: |
+            assembly/card/dist/米鲸_MiSide_AI娘_最终角色卡_v1.0.0.json
+            assembly/worldbook/dist/米鲸_character_book.json
+          retention-days: 7
