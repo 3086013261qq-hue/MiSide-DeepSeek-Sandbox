@@ -1,0 +1,41 @@
+name: Build MiJing Worldbook
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'assembly/worldbook/build_worldbook.py'
+      - 'assembly/worldbook/trigger_aliases.json'
+      - 'worldbook/blue/**'
+      - 'worldbook/green/**'
+      - 'worldbook/characters/**'
+      - 'worldbook/timeline/**'
+      - 'worldbook/locations/**'
+      - '.github/workflows/build-mijing-worldbook.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Assemble and audit worldbook
+        run: python assembly/worldbook/build_worldbook.py
+      - name: Commit generated worldbook JSON and QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assembly/worldbook/dist/米鲸_character_book.json assembly/worldbook/dist/米鲸_worldbook_build_report.json
+          if git diff --cached --quiet; then
+            echo 'No generated changes.'
+            exit 0
+          fi
+          git commit -m 'assembly: generate MiJing fullstack character_book [skip ci]'
+          git push origin HEAD:main
